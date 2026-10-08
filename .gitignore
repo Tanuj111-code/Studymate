@@ -1,0 +1,14 @@
+.env
+backend/.env
+backend/server.*.log
+.run/
+backend/.venv/
+backend/.packages/
+backend/tmpexw*/
+frontend/node_modules/
+frontend/.npm-cache/
+frontend/dist/
+frontend/server.*.log
+__pycache__/
+*.pyc
+.DS_Store
