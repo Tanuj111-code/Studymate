@@ -1,0 +1,11 @@
+Introduction to Artificial Intelligence
+
+Artificial intelligence (AI) is the field of computer science that creates systems able to perform tasks that usually require human intelligence. These tasks include recognizing speech, understanding language, solving problems and making decisions.
+
+Machine learning is a branch of AI in which computers learn patterns from data rather than following only explicitly programmed rules. In supervised learning, a model learns from labeled examples. In unsupervised learning, it looks for patterns in unlabeled data. Reinforcement learning trains an agent to make decisions by receiving rewards or penalties for its actions.
+
+A neural network is a computing system inspired by networks of neurons. Deep learning uses neural networks with many layers to learn complex patterns. Training data is used to fit a model, while test data helps estimate how well it generalizes to new examples.
+
+Natural language processing (NLP) helps computers work with human language. Computer vision enables systems to interpret images and video. AI applications include medical image analysis, recommendation systems, translation and voice assistants.
+
+AI systems can reproduce biases present in training data. Privacy, transparency, safety and human oversight are important considerations when designing responsible AI. AI can support human decision-making, but its output should be checked in high-stakes situations.
