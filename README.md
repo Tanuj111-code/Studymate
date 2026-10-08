@@ -40,9 +40,11 @@ ai-studymate/
 
 ## Setup and run
 
-### One-command Windows launch
+### One-click Windows launch
 
-From the `ai-studymate` folder in PowerShell, run:
+In File Explorer, double-click `Start-StudyMate.cmd`. It runs `Open-StudyMate.ps1`, starts the backend and frontend, then opens the local site at `http://127.0.0.1:5173`. The first launch may take a few minutes while dependencies are installed.
+
+You can also start it from PowerShell in the project folder:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\Open-StudyMate.ps1
