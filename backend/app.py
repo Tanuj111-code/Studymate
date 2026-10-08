@@ -11,11 +11,14 @@ from services.ai_service import analyze, analyze_pdf_file, evaluate
 app = Flask(__name__)
 # Leave room for multipart boundaries; extract_document enforces the 10 MB file limit.
 app.config["MAX_CONTENT_LENGTH"] = 11 * 1024 * 1024
-CORS(app, resources={r"/api/*": {"origins": ["http://localhost:5173", "http://127.0.0.1:5173"]}})
+CORS(app, resources={r"/api/*": {"origins": [
+    "http://localhost:5173", "http://127.0.0.1:5173",
+    "http://localhost:5174", "http://127.0.0.1:5174",
+]}})
 
 @app.get("/api/health")
 def health():
-    return jsonify({"status": "ok", "ai_configured": bool(os.getenv("OPENROUTER_API_KEY"))})
+    return jsonify({"status": "ok", "ai_configured": bool(os.getenv("GEMINI_API_KEY"))})
 
 @app.post("/api/analyze")
 def upload_and_analyze():
@@ -28,7 +31,7 @@ def upload_and_analyze():
         if extension == "pdf":
             file.stream.seek(0)
             pdf_bytes = file.stream.read()
-            result = analyze(text) if is_readable_pdf_text(text) else analyze_pdf_file(pdf_bytes, file.filename)
+            result = analyze(text) if is_readable_pdf_text(text) else analyze_pdf_file(pdf_bytes, text)
         else:
             result = analyze(text)
         result["document_name"] = file.filename

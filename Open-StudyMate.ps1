@@ -2,6 +2,8 @@ $ErrorActionPreference = 'Stop'
 $project = Split-Path -Parent $MyInvocation.MyCommand.Path
 $backend = Join-Path $project 'backend'
 $frontend = Join-Path $project 'frontend'
+$apiUrl = 'http://127.0.0.1:5000'
+$siteUrl = 'http://127.0.0.1:5174'
 $venv = Join-Path $backend '.venv'
 $python = Join-Path $venv 'Scripts\python.exe'
 $runState = Join-Path $project '.run'
@@ -24,7 +26,7 @@ if (-not (Test-Path $python)) {
     }
 }
 
-$dependencyProbe = Start-Process -FilePath $python -ArgumentList '-c "import flask, flask_cors, pypdf, dotenv, openai, fitz"' `
+$dependencyProbe = Start-Process -FilePath $python -ArgumentList '-c "import flask, flask_cors, pypdf, dotenv"' `
     -WorkingDirectory $backend -WindowStyle Hidden -Wait -PassThru `
     -RedirectStandardOutput (Join-Path $runState 'dependency-check.out.log') `
     -RedirectStandardError (Join-Path $runState 'dependency-check.err.log')
@@ -55,7 +57,7 @@ if (-not (Test-Path (Join-Path $frontend 'node_modules\vite'))) {
 
 # Do not create duplicate server processes if the app is already running.
 $backendReady = $false
-try { $backendReady = (Invoke-RestMethod 'http://127.0.0.1:5000/api/health' -TimeoutSec 2).status -eq 'ok' } catch { }
+try { $backendReady = (Invoke-RestMethod "$apiUrl/api/health" -TimeoutSec 2).status -eq 'ok' } catch { }
 if (-not $backendReady) {
     $backendProcess = Start-Process -FilePath $python -ArgumentList 'app.py' -WorkingDirectory $backend -WindowStyle Hidden `
         -RedirectStandardOutput (Join-Path $backend 'server.out.log') `
@@ -64,7 +66,7 @@ if (-not $backendReady) {
 }
 
 $frontendReady = $false
-try { $frontendReady = (Invoke-WebRequest 'http://127.0.0.1:5173' -TimeoutSec 2 -UseBasicParsing).StatusCode -eq 200 } catch { }
+try { $frontendReady = (Invoke-WebRequest $siteUrl -TimeoutSec 2 -UseBasicParsing).StatusCode -eq 200 } catch { }
 if (-not $frontendReady) {
     $frontendLog = Join-Path $frontend 'server.out.log'
     $frontendError = Join-Path $frontend 'server.err.log'
@@ -77,8 +79,8 @@ if (-not $frontendReady) {
 $ready = $false
 for ($attempt = 0; $attempt -lt 30; $attempt++) {
     try {
-        $api = Invoke-RestMethod 'http://127.0.0.1:5000/api/health' -TimeoutSec 2
-        $site = Invoke-WebRequest 'http://127.0.0.1:5173' -TimeoutSec 2 -UseBasicParsing
+        $api = Invoke-RestMethod "$apiUrl/api/health" -TimeoutSec 2
+        $site = Invoke-WebRequest $siteUrl -TimeoutSec 2 -UseBasicParsing
         if ($api.status -eq 'ok' -and $site.StatusCode -eq 200) { $ready = $true; break }
     } catch { }
     Start-Sleep -Seconds 1
@@ -87,5 +89,5 @@ if (-not $ready) {
     throw 'StudyMate did not start in time. Check backend\server.err.log and frontend\server.err.log.'
 }
 
-Start-Process 'http://127.0.0.1:5173'
-Write-Host 'AI StudyMate is open at http://127.0.0.1:5173'
+Start-Process $siteUrl
+Write-Host "AI StudyMate is open at $siteUrl"
