@@ -1,5 +1,4 @@
-# AI StudyMate
-#Ai lab project By TANUJ SINGH - 2402221530129, Under the guidance of Ms. ANJALI SRIVASTAVA Ma'am.
+# AI StudyMate Ai lab project By TANUJ SINGH - 2402221530129, Under the guidance of Ms. ANJALI SRIVASTAVA Ma'am.
 
 **Learn Smarter. Prepare Better.** A local-first study assistant that turns a PDF or text document into a summary, topic list, study questions, quiz and personalized review suggestions.
 
